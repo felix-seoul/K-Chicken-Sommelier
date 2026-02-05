@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Find your perfect Korean fried chicken in 30 seconds. Take the taste quiz and get personalized recommendations.">
+  <meta name="theme-color" content="#E31837">
+  <title>K-Chicken Sommelier — Your taste. Your chicken. Instantly.</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- ========== PAGE 1: HOME ========== -->
+    <div id="page-home" class="page active">
+      <header class="header">
+        <div class="header-logo">K-Chicken Sommelier</div>
+        <button class="header-action" data-navigate="premium">Premium</button>
+      </header>
+      
+      <section class="hero">
+        <h1 class="hero-headline">Pick your perfect K-chicken in 30 seconds.</h1>
+        <p class="hero-sub">6 quick questions. 3 matches you'll actually order.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" data-action="start-quiz">Start the Taste Quiz</button>
+          <button class="btn btn-secondary" data-navigate="results">See Today's Top Picks</button>
+        </div>
+      </section>
+      
+      <section class="section">
+        <p class="section-subtitle text-center">Today's picks updated weekly</p>
+        <div class="teaser-cards">
+          <div class="teaser-card" data-navigate="results">
+            <span class="badge">Top Pick</span>
+            <div class="teaser-card-title">Ultra Crunch Wings</div>
+            <div class="teaser-card-sub">Crunch lovers</div>
+          </div>
+          <div class="teaser-card" data-navigate="results">
+            <span class="badge">Low Mess</span>
+            <div class="teaser-card-title">Soy Garlic Classic</div>
+            <div class="teaser-card-sub">Clean finish</div>
+          </div>
+          <div class="teaser-card" data-navigate="results">
+            <span class="badge">Best Value</span>
+            <div class="teaser-card-title">Half & Half Set</div>
+            <div class="teaser-card-sub">Share-ready</div>
+          </div>
+        </div>
+      </section>
+      
+      <footer class="section text-center">
+        <p class="text-muted" style="font-size: var(--font-sm);">No account needed to start.</p>
+      </footer>
+    </div>
+    
+    <!-- ========== PAGE 2: QUIZ ========== -->
+    <div id="page-quiz" class="page">
+      <header class="header">
+        <button class="header-back" id="quiz-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Back
+        </button>
+      </header>
+      
+      <div class="progress-container">
+        <div class="progress-text" id="progress-text">Question 1 of 6</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 16.67%"></div>
+        </div>
+      </div>
+      
+      <div class="quiz-question">
+        <h2 class="quiz-title" id="quiz-title">How crunchy do you want it?</h2>
+        <div class="quiz-options" id="quiz-options">
+          <!-- Options rendered by JS -->
+        </div>
+      </div>
+      
+      <div class="bottom-bar">
+        <div class="bottom-bar-buttons">
+          <button class="btn btn-primary" id="quiz-next" disabled>Next</button>
+          <button class="btn btn-text" id="quiz-skip">Skip</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ========== PAGE 3: RESULTS ========== -->
+    <div id="page-results" class="page">
+      <header class="header">
+        <div class="header-logo">K-Chicken Sommelier</div>
+        <button class="header-action" onclick="shareResults()">Share</button>
+      </header>
+      
+      <section class="section">
+        <h1 class="section-title" style="font-size: var(--font-2xl);">Your Top Matches</h1>
+        <div class="profile-chips" id="profile-chips">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+      
+      <section class="section" style="border-bottom: none;">
+        <div id="match-cards">
+          <!-- Match cards rendered by JS -->
+        </div>
+      </section>
+      
+      <!-- Locked Premium Section -->
+      <div class="locked-section" id="locked-premium-section">
+        <div class="locked-section-title">Premium Unlocks</div>
+        <div class="locked-item">Group Order Plan — Mix 2–6 tastes. No drama.</div>
+        <div class="locked-item">Deal Finder — Best sets, faster.</div>
+        <div class="locked-item">Full Pairing Report — Sides + drinks that just work.</div>
+        <div class="locked-item">Regret Radar — Know dealbreakers before you order.</div>
+      </div>
+      
+      <div class="bottom-bar">
+        <div class="bottom-bar-buttons">
+          <button class="btn btn-primary" data-navigate="premium">Unlock Premium</button>
+          <button class="btn btn-secondary" data-action="start-quiz">Try another profile</button>
+        </div>
+        <p class="pricing-note">First month free. Then $4.99/month. Cancel anytime.</p>
+      </div>
+    </div>
+    
+    <!-- ========== PAGE 4: PREMIUM ========== -->
+    <div id="page-premium" class="page">
+      <header class="header">
+        <button class="header-back" data-navigate="home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Back
+        </button>
+      </header>
+      
+      <section class="premium-hero">
+        <h1 class="premium-headline">Go Full Sommelier</h1>
+        <p class="premium-sub">Start free for 1 month. Upgrade your orders instantly.</p>
+      </section>
+      
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">👥</div>
+          <div class="feature-text">Group Order Mode</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💰</div>
+          <div class="feature-text">Deal Finder</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🍟</div>
+          <div class="feature-text">Full Pairing Report</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚠️</div>
+          <div class="feature-text">Regret Radar</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-text">Taste History</div>
+        </div>
+      </div>
+      
+      <div class="pricing-card">
+        <div class="pricing-big">First month free</div>
+        <div class="pricing-small">Then $4.99/month</div>
+        <div class="pricing-micro">Cancel anytime</div>
+      </div>
+      
+      <section class="section" style="padding-top: 0;">
+        <button class="btn btn-primary" data-action="start-premium">Start Free Month</button>
+        <button class="btn btn-text" style="width: 100%; margin-top: var(--space-sm);" data-action="restore-purchase">Restore Purchase</button>
+      </section>
+      
+      <div class="trust-row">
+        <div class="trust-item">Secure checkout</div>
+        <div class="trust-item">No hidden fees</div>
+        <div class="trust-item">Cancel anytime</div>
+      </div>
+      
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">When do I get charged?</button>
+          <div class="faq-answer">After your free month ends. If you cancel before then, you won't be charged anything.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I cancel during the free month?</button>
+          <div class="faq-answer">Yes. You won't be charged if you cancel before your free trial ends.</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ========== PAGE 5: SETTINGS ========== -->
+    <div id="page-settings" class="page">
+      <header class="header">
+        <button class="header-back" data-navigate="results">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Back
+        </button>
+        <div style="font-weight: 700;">My Taste</div>
+        <div style="width: 60px;"></div>
+      </header>
+      
+      <!-- Taste Profile Section -->
+      <section class="settings-section">
+        <h2 class="section-title">Your Taste Profile</h2>
+        <div class="profile-chips" id="settings-profile-chips">
+          <!-- Rendered by JS -->
+        </div>
+        <button class="btn btn-secondary mt-md" data-action="edit-quiz">Edit Taste Quiz</button>
+      </section>
+      
+      <!-- History Section -->
+      <section class="settings-section">
+        <h2 class="section-title">Taste History</h2>
+        <div id="history-list" class="history-list">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+      
+      <!-- Premium Status Section -->
+      <section class="settings-section" id="settings-premium-banner">
+        <!-- Rendered by JS based on premium state -->
+      </section>
+      
+      <!-- Feedback Section -->
+      <section class="settings-section">
+        <h2 class="section-title">Feedback</h2>
+        <div class="settings-row">
+          <span class="settings-label">Send feedback</span>
+          <span class="settings-value">→</span>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">Report an issue</span>
+          <span class="settings-value">→</span>
+        </div>
+      </section>
+      
+      <!-- Language Section -->
+      <section class="settings-section">
+        <h2 class="section-title">Language</h2>
+        <div class="settings-row">
+          <span class="settings-label">English</span>
+          <div class="toggle active" id="lang-toggle"></div>
+        </div>
+      </section>
+    </div>
+    
+  </div>
+  
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
