@@ -293,7 +293,7 @@ function renderMatchCards() {
           <div class="mini-meter">
             <div class="mini-meter-label">Crunch</div>
             <div class="mini-meter-bar">
-              <div class="mini-meter-fill" style="width: ${item.crunchLevel * 20}%"></div>
+              <div class="mini-meter-fill" style="width: ${(item.crunchLevel || 0) * 33}%"></div>
             </div>
           </div>
           <div class="mini-meter">
@@ -309,7 +309,7 @@ function renderMatchCards() {
             </div>
           </div>
         </div>
-        <div class="match-card-reason">${item.reasons[index % item.reasons.length]}</div>
+        <div class="match-card-reason">${item.characteristics || 'Perfect match for your taste profile.'}</div>
       </div>
     </div>
   `).join('');

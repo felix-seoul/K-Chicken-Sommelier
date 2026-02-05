@@ -1,7 +1,9 @@
 /* K-Chicken Sommelier - Design System */
 
 /* ========== CSS RESET & BASE ========== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -103,8 +105,15 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .page-content {
@@ -130,6 +139,10 @@ body {
   font-weight: 800;
   color: var(--primary-red);
   letter-spacing: -0.5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .header-action {
@@ -920,15 +933,41 @@ body {
 }
 
 /* ========== UTILITIES ========== */
-.text-center { text-align: center; }
-.text-muted { color: var(--text-muted); }
-.font-bold { font-weight: 700; }
-.mt-sm { margin-top: var(--space-sm); }
-.mt-md { margin-top: var(--space-md); }
-.mt-lg { margin-top: var(--space-lg); }
-.mb-sm { margin-bottom: var(--space-sm); }
-.mb-md { margin-bottom: var(--space-md); }
-.mb-lg { margin-bottom: var(--space-lg); }
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+
+.mt-md {
+  margin-top: var(--space-md);
+}
+
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+
+.mb-sm {
+  margin-bottom: var(--space-sm);
+}
+
+.mb-md {
+  margin-bottom: var(--space-md);
+}
+
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 420px) {
@@ -936,11 +975,11 @@ body {
     --font-3xl: 1.75rem;
     --font-2xl: 1.25rem;
   }
-  
+
   .hero {
     padding: var(--space-xl) var(--space-md);
   }
-  
+
   .quiz-title {
     font-size: var(--font-xl);
   }
