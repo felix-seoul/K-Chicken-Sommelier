@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initPremium();
     initSettings();
     initFAQ();
+    initLanguages();
+    initShare();
     showPage('home');
 });
 
@@ -93,9 +95,11 @@ function renderQuizQuestion() {
     const question = QUIZ_QUESTIONS[state.currentQuestion];
     if (!question) return;
 
+    const progressFill = document.querySelector('.progress-fill');
+    const progressText = document.querySelector('.progress-text');
+    const lang = state.language || 'en';
+
     // Update progress
-    const progressText = document.getElementById('progress-text');
-    const progressFill = document.getElementById('progress-fill');
     if (progressText) {
         progressText.textContent = `Question ${state.currentQuestion + 1} of ${QUIZ_QUESTIONS.length}`;
     }
@@ -104,22 +108,29 @@ function renderQuizQuestion() {
         progressFill.style.width = `${progress}%`;
     }
 
+    // Get translations
+    const qTrans = QUIZ_TRANSLATIONS[question.id];
+    const titleText = qTrans?.title[lang] || question.title;
+
     // Update question title
     const titleEl = document.getElementById('quiz-title');
     if (titleEl) {
-        titleEl.textContent = question.title;
+        titleEl.textContent = titleText;
     }
 
     // Render options
     const optionsContainer = document.getElementById('quiz-options');
     if (optionsContainer) {
-        optionsContainer.innerHTML = question.options.map((option, index) => `
+        optionsContainer.innerHTML = question.options.map((option, index) => {
+            const labelText = qTrans?.options[option.value]?.[lang] || option.label;
+            return `
       <button class="quiz-option ${state.answers[question.id] === option.value ? 'selected' : ''}" 
               data-value="${option.value}" 
               data-index="${index}">
-        ${option.label}
+        ${labelText}
       </button>
-    `).join('');
+    `;
+        }).join('');
 
         // Add click handlers
         optionsContainer.querySelectorAll('.quiz-option').forEach(btn => {
@@ -250,13 +261,15 @@ function renderResults() {
 
 function renderProfileChips() {
     const container = document.getElementById('profile-chips');
+    const lang = state.language || 'en';
+    const strings = UI_STRINGS[lang];
+
     if (!container || !state.userProfile) return;
 
     const chips = [
-        { label: 'Crunch', value: state.userProfile.crunch },
-        { label: 'Heat', value: state.userProfile.heat },
-        { label: 'Sauce', value: state.userProfile.sauce },
-        { label: 'Goal', value: state.userProfile.goal }
+        { label: strings.crunch, value: state.userProfile.crunch },
+        { label: strings.heat, value: state.userProfile.heat },
+        { label: strings.sauce, value: state.userProfile.sauce }
     ];
 
     container.innerHTML = chips.map(chip => `
@@ -271,39 +284,43 @@ function renderMatchCards() {
     const container = document.getElementById('match-cards');
     if (!container) return;
 
+    const lang = state.language || 'en';
+    const strings = UI_STRINGS[lang];
+
     container.innerHTML = state.matches.map((item, index) => `
     <div class="match-card">
-      <div class="match-card-image">
+      <div class="match-card-image" onclick="window.open('${item.menuPage}', '_blank')" style="cursor: pointer; overflow: hidden;">
+        <img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;">
         <div class="match-card-badge">
           <span class="badge ${item.badge === 'Spicy' ? 'badge-spicy' : ''}">${item.badge}</span>
         </div>
       </div>
       <div class="match-card-content">
         <div class="match-card-header">
-          <div>
-            <div class="match-card-name">${item.name}</div>
+          <div onclick="window.open('${item.website}', '_blank')" style="cursor: pointer;">
+            <div class="match-card-name">${item.name} <span style="font-size: 12px; vertical-align: middle;">🔗</span></div>
             <div class="match-card-brand">${item.brand}</div>
           </div>
           <div class="match-card-score">
             <div class="match-card-score-value">${item.score}</div>
-            <div class="match-card-score-label">Match</div>
+            <div class="match-card-score-label">${strings.matchScore}</div>
           </div>
         </div>
         <div class="mini-meters">
           <div class="mini-meter">
-            <div class="mini-meter-label">Crunch</div>
+            <div class="mini-meter-label">${strings.crunch}</div>
             <div class="mini-meter-bar">
               <div class="mini-meter-fill" style="width: ${(item.crunchLevel || 0) * 33}%"></div>
             </div>
           </div>
           <div class="mini-meter">
-            <div class="mini-meter-label">Heat</div>
+            <div class="mini-meter-label">${strings.heat}</div>
             <div class="mini-meter-bar">
               <div class="mini-meter-fill" style="width: ${item.heatLevel * 20}%"></div>
             </div>
           </div>
           <div class="mini-meter">
-            <div class="mini-meter-label">Sauce</div>
+            <div class="mini-meter-label">${strings.sauce}</div>
             <div class="mini-meter-bar">
               <div class="mini-meter-fill" style="width: ${item.sauceLevel * 20}%"></div>
             </div>
@@ -376,13 +393,28 @@ function initSettings() {
 function renderSettings() {
     // Render profile chips in settings
     const profileSection = document.getElementById('settings-profile-chips');
+    const lang = state.language || 'en';
+    const uiStrings = UI_STRINGS[lang];
+
     if (profileSection && state.userProfile) {
-        const chips = Object.entries(state.userProfile).map(([key, value]) => `
+        const chips = Object.entries(state.userProfile).map(([key, value]) => {
+            // Translate Key
+            const label = uiStrings[key] || capitalize(key);
+
+            // Translate Value (if available)
+            const qTrans = QUIZ_TRANSLATIONS[key];
+            const valTrans = qTrans?.options[value]?.[lang] || value;
+
+            // Skip legacy keys if needed, or show them
+            if (['situation', 'goal'].includes(key)) return '';
+
+            return `
       <div class="profile-chip">
-        <span class="profile-chip-label">${capitalize(key)}:</span>
-        <span class="profile-chip-value">${value}</span>
+        <span class="profile-chip-label">${label}:</span>
+        <span class="profile-chip-value">${valTrans}</span>
       </div>
-    `).join('');
+    `;
+        }).join('');
         profileSection.innerHTML = chips;
     }
 
@@ -484,21 +516,81 @@ function capitalize(str) {
 }
 
 // Share functionality
-function shareResults() {
-    if (navigator.share && state.matches.length > 0) {
-        navigator.share({
-            title: 'K-Chicken Sommelier',
-            text: `My top K-chicken match: ${state.matches[0].name} (${state.matches[0].score}% match)!`,
-            url: window.location.href
+// ========== LANGUAGES ==========
+// ========== LANGUAGES ==========
+function initLanguages() {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const lang = btn.dataset.lang;
+            applyTranslations(lang);
         });
-    } else {
-        // Fallback: copy to clipboard
-        const text = `My top K-chicken match: ${state.matches[0].name} (${state.matches[0].score}% match)! Try K-Chicken Sommelier!`;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Copied to clipboard!');
-        });
+    });
+}
+
+function applyTranslations(lang) {
+    state.language = lang;
+    const strings = UI_STRINGS[lang];
+    if (!strings) return;
+
+    // Helper to safe update
+    const updateText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    };
+
+    // Home Page
+    updateText('hero-headline', strings.heroHeadline);
+    updateText('hero-sub', strings.heroSub);
+    updateText('start-quiz-btn', strings.startBtn);
+
+    // Header & Quiz
+    updateText('back-btn-text', strings.backBtn);
+    updateText('quiz-next', strings.nextBtn);
+    updateText('quiz-skip', strings.skipBtn);
+
+    // Results
+    updateText('results-title', strings.resultTitle);
+    updateText('share-btn', strings.shareBtn);
+
+    // Update active state on all buttons
+    document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === lang);
+    });
+
+    console.log(`Language switched to: ${lang}`);
+
+    // Re-render current content if needed
+    if (state.currentPage === 'quiz') {
+        renderQuizQuestion();
+    } else if (state.currentPage === 'results') {
+        renderResults(); // This re-renders match cards with new language
+    } else if (state.currentPage === 'settings') {
+        renderSettings();
     }
 }
 
-// Attach share to window for onclick
-window.shareResults = shareResults;
+// ========== SHARE ==========
+function initShare() {
+    const shareBtn = document.getElementById('share-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            const text = state.matches.length > 0
+                ? `My top K-chicken match: ${state.matches[0].name} (${state.matches[0].score}% match)!`
+                : 'Find your perfect Korean chicken match!';
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'K-Chicken Sommelier',
+                    text: text,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(text + ' ' + window.location.href).then(() => {
+                    alert('Copied to clipboard!');
+                });
+            }
+        });
+    }
+}
+window.shareResults = initShare; // Backwards compatibility just in case
+

@@ -17,15 +17,24 @@
     <!-- ========== PAGE 1: HOME ========== -->
     <div id="page-home" class="page active">
       <header class="header">
-        <button class="header-logo" data-navigate="home">K-Chicken Sommelier</button>
-        <button class="header-action" data-navigate="premium">Premium</button>
+        <div class="header-logo-container">
+          <button class="header-logo" data-navigate="home">K-Chicken Sommelier</button>
+        </div>
+        <div class="language-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ko">KR</button>
+          <button class="lang-btn" data-lang="zh">CN</button>
+          <button class="lang-btn" data-lang="ja">JP</button>
+        </div>
+        <button class="header-action" data-navigate="premium" id="header-premium-btn">Premium</button>
       </header>
 
       <section class="hero">
-        <h1 class="hero-headline">Pick your perfect K-chicken in 30 seconds.</h1>
-        <p class="hero-sub">6 quick questions. 3 matches you'll actually order.</p>
+        <h1 class="hero-headline" id="hero-headline">Find your K-Chicken Soulmate 🍗</h1>
+        <p class="hero-sub" id="hero-sub">Take the 2-minute quiz to discover which Korean chicken brand perfectly
+          matches your taste profile.</p>
         <div class="hero-ctas">
-          <button class="btn btn-primary" data-action="start-quiz">Start the Taste Quiz</button>
+          <button class="btn btn-primary" data-action="start-quiz" id="start-quiz-btn">Find My Chicken Match</button>
           <button class="btn btn-secondary" data-navigate="results">See Today's Top Picks</button>
         </div>
       </section>
@@ -60,11 +69,20 @@
     <div id="page-quiz" class="page">
       <header class="header">
         <button class="header-back" id="quiz-back">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M15 18l-6-6 6-6" />
           </svg>
-          Back
+          <span id="back-btn-text">Back</span>
         </button>
+        <div class="header-logo-container">
+          <button class="header-logo" data-navigate="home">KCS</button>
+        </div>
+        <div class="language-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ko">KR</button>
+          <button class="lang-btn" data-lang="zh">CN</button>
+          <button class="lang-btn" data-lang="ja">JP</button>
+        </div>
       </header>
 
       <div class="progress-container">
@@ -92,12 +110,20 @@
     <!-- ========== PAGE 3: RESULTS ========== -->
     <div id="page-results" class="page">
       <header class="header">
-        <button class="header-logo" data-navigate="home">K-Chicken Sommelier</button>
-        <button class="header-action" onclick="shareResults()">Share</button>
+        <div class="header-logo-container">
+          <button class="header-logo" data-navigate="home">K-Chicken Sommelier</button>
+        </div>
+        <div class="language-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ko">KR</button>
+          <button class="lang-btn" data-lang="zh">CN</button>
+          <button class="lang-btn" data-lang="ja">JP</button>
+        </div>
+        <button class="header-action" id="share-btn">Share</button>
       </header>
 
       <section class="section">
-        <h1 class="section-title" style="font-size: var(--font-2xl);">Your Top Matches</h1>
+        <h1 class="section-title" style="font-size: var(--font-2xl);" id="results-title">Your Perfect Match</h1>
         <div class="profile-chips" id="profile-chips">
           <!-- Rendered by JS -->
         </div>
@@ -136,6 +162,12 @@
           </svg>
           Back
         </button>
+        <div class="language-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ko">KR</button>
+          <button class="lang-btn" data-lang="zh">CN</button>
+          <button class="lang-btn" data-lang="ja">JP</button>
+        </div>
       </header>
 
       <section class="premium-hero">
@@ -207,7 +239,12 @@
           Back
         </button>
         <div style="font-weight: 700;">My Taste</div>
-        <div style="width: 60px;"></div>
+        <div class="language-selector">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ko">KR</button>
+          <button class="lang-btn" data-lang="zh">CN</button>
+          <button class="lang-btn" data-lang="ja">JP</button>
+        </div>
       </header>
 
       <!-- Taste Profile Section -->
