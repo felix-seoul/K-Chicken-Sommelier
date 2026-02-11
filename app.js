@@ -544,8 +544,205 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Share functionality
-// ========== LANGUAGES ==========
+function hashText(text) {
+    return (text || '').split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+}
+
+function getStrings() {
+    return UI_STRINGS[state.language || 'en'] || UI_STRINGS.en;
+}
+
+function pickBySeed(list, seedBase) {
+    if (!list.length) return '';
+    return list[Math.abs(hashText(seedBase)) % list.length];
+}
+
+function buildSharePayload() {
+    const strings = getStrings();
+    const lang = state.language || 'en';
+    const top = state.matches[0];
+    const second = state.matches[1];
+    const third = state.matches[2];
+    const url = window.location.href;
+
+    if (!top) {
+        const fallback = lang === 'ko'
+            ? '30초 취향 테스트로 내 치킨 소울메이트 찾았다. 너도 해봐.'
+            : 'I just took a 30-second test and found my K-chicken soulmate. Try it.';
+        return {
+            url,
+            x: `${fallback} #KChickenSommelier`,
+            facebook: fallback,
+            instagram: `${fallback}\n#kchicken #foodtest #kchickensommelier`,
+            preview: fallback,
+            strings
+        };
+    }
+
+    const hooksKo = [
+        '치킨 취향 테스트했더니 소름 돋는 결과 나옴.',
+        '오늘 야식, 이 테스트 한 번으로 종결.',
+        '치킨 고르다 시간 버리는 사람들 필수.'
+    ];
+    const hooksEn = [
+        'This chicken taste test read me too well.',
+        'One quiz and tonight’s order is settled.',
+        'If you overthink chicken orders, take this test.'
+    ];
+    const seed = `${top.id}-${top.score}`;
+    const hook = lang === 'ko' ? pickBySeed(hooksKo, seed) : pickBySeed(hooksEn, seed);
+    const topLine = lang === 'ko'
+        ? `${top.score}% 취향 일치: ${top.brand} ${top.name}`
+        : `${top.score}% match: ${top.brand} ${top.name}`;
+    const rankLine = second && third
+        ? (lang === 'ko' ? `2위 ${second.name} / 3위 ${third.name}` : `2nd ${second.name} / 3rd ${third.name}`)
+        : '';
+    const challengeLine = lang === 'ko'
+        ? '너도 테스트하고 결과 공개해봐.'
+        : 'Take the test and post your result.';
+
+    const xText = [
+        hook,
+        topLine,
+        rankLine,
+        challengeLine,
+        '#치킨테스트 #치킨추천 #KChickenSommelier'
+    ].filter(Boolean).join('\n');
+
+    const facebookText = [
+        hook,
+        topLine,
+        rankLine,
+        lang === 'ko'
+            ? '치킨 메뉴 고민 끝내고 싶으면 이 테스트 추천.'
+            : 'If you want faster chicken picks, this quiz is worth it.',
+        challengeLine
+    ].filter(Boolean).join('\n');
+
+    const instagramText = [
+        lang === 'ko' ? '오늘의 치킨 결과 공개' : 'Dropping my chicken test result',
+        `${top.brand} ${top.name} (${top.score}% match)`,
+        rankLine,
+        challengeLine,
+        '#치킨테스트 #치킨추천 #야식추천 #kchicken #foodie #kchickensommelier'
+    ].filter(Boolean).join('\n');
+
+    return {
+        url,
+        x: xText,
+        facebook: facebookText,
+        instagram: instagramText,
+        preview: instagramText,
+        strings
+    };
+}
+
+function updateShareSheetTexts() {
+    const payload = buildSharePayload();
+    const strings = payload.strings;
+
+    const titleEl = document.getElementById('share-sheet-title');
+    if (titleEl) titleEl.textContent = strings.shareSheetTitle || 'Share your result';
+
+    const subTitleEl = document.getElementById('share-sheet-subtitle');
+    if (subTitleEl) subTitleEl.textContent = strings.shareSheetSubtitle || 'Post your chicken flex on social.';
+
+    const previewEl = document.getElementById('share-preview-text');
+    if (previewEl) previewEl.textContent = payload.preview;
+
+    const xBtn = document.querySelector('[data-share-platform="x"]');
+    if (xBtn) xBtn.textContent = strings.shareX || 'Share on X';
+
+    const fbBtn = document.querySelector('[data-share-platform="facebook"]');
+    if (fbBtn) fbBtn.textContent = strings.shareFacebook || 'Share on Facebook';
+
+    const igBtn = document.querySelector('[data-share-platform="instagram"]');
+    if (igBtn) igBtn.textContent = strings.shareInstagram || 'Share on Instagram';
+
+    const copyBtn = document.querySelector('[data-share-platform="copy"]');
+    if (copyBtn) copyBtn.textContent = strings.shareCopy || 'Copy caption';
+}
+
+function setShareStatus(message) {
+    const statusEl = document.getElementById('share-status');
+    if (statusEl) statusEl.textContent = message || '';
+}
+
+function openShareModal() {
+    const modal = document.getElementById('share-modal');
+    if (!modal) return;
+    updateShareSheetTexts();
+    setShareStatus('');
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeShareModal() {
+    const modal = document.getElementById('share-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+}
+
+async function copyToClipboard(text) {
+    if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    textarea.remove();
+}
+
+function openExternalShare(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+async function handleSharePlatform(platform) {
+    const payload = buildSharePayload();
+    const strings = payload.strings;
+
+    if (platform === 'x') {
+        const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(payload.x)}&url=${encodeURIComponent(payload.url)}`;
+        openExternalShare(xUrl);
+        closeShareModal();
+        return;
+    }
+
+    if (platform === 'facebook') {
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(payload.url)}&quote=${encodeURIComponent(payload.facebook)}`;
+        openExternalShare(fbUrl);
+        closeShareModal();
+        return;
+    }
+
+    if (platform === 'instagram') {
+        try {
+            await copyToClipboard(`${payload.instagram}\n${payload.url}`);
+            setShareStatus(strings.shareInstagramCopied || 'Caption copied. Paste it on Instagram.');
+        } catch (error) {
+            console.error(error);
+            setShareStatus('Copy failed. Please try again.');
+        }
+        openExternalShare('https://www.instagram.com/');
+        return;
+    }
+
+    if (platform === 'copy') {
+        try {
+            await copyToClipboard(`${payload.instagram}\n${payload.url}`);
+            setShareStatus(strings.shareCopied || 'Copied to clipboard!');
+        } catch (error) {
+            console.error(error);
+            setShareStatus('Copy failed. Please try again.');
+        }
+    }
+}
+
 // ========== LANGUAGES ==========
 function initLanguages() {
     document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -580,6 +777,7 @@ function applyTranslations(lang) {
     // Results
     updateText('results-title', strings.resultTitle);
     updateText('share-btn', strings.shareBtn);
+    updateShareSheetTexts();
 
     // Update active state on all buttons
     document.querySelectorAll('.lang-btn').forEach(b => {
@@ -601,25 +799,22 @@ function applyTranslations(lang) {
 // ========== SHARE ==========
 function initShare() {
     const shareBtn = document.getElementById('share-btn');
-    if (shareBtn) {
-        shareBtn.addEventListener('click', () => {
-            const text = state.matches.length > 0
-                ? `My top K-chicken match: ${state.matches[0].name} (${state.matches[0].score}% match)!`
-                : 'Find your perfect Korean chicken match!';
+    const closeBtn = document.getElementById('share-close-btn');
 
-            if (navigator.share) {
-                navigator.share({
-                    title: 'K-Chicken Sommelier',
-                    text: text,
-                    url: window.location.href
-                }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(text + ' ' + window.location.href).then(() => {
-                    alert('Copied to clipboard!');
-                });
-            }
-        });
-    }
+    if (shareBtn) shareBtn.addEventListener('click', openShareModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeShareModal);
+
+    document.querySelectorAll('[data-share-close]').forEach(el => {
+        el.addEventListener('click', closeShareModal);
+    });
+
+    document.querySelectorAll('[data-share-platform]').forEach(btn => {
+        btn.addEventListener('click', () => handleSharePlatform(btn.dataset.sharePlatform));
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeShareModal();
+    });
 }
 window.shareResults = initShare; // Backwards compatibility just in case
 
