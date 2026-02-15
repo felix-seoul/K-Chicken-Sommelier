@@ -170,14 +170,20 @@ function renderQuizQuestion() {
 }
 
 function renderSingleSelectOptions(container, question) {
+    const lang = state.language || 'en';
+    const qTrans = QUIZ_TRANSLATIONS[question.id];
+
     container.innerHTML = question.options.map((option, index) => {
         const isSelected = state.answers[question.id] === option.value;
+        // Try to get translation, fallback to option.label
+        const translatedLabel = qTrans?.options?.[option.value]?.[lang] || option.label;
+
         return `
       <button class="quiz-option ${isSelected ? 'selected' : ''}" 
               data-type="single"
               data-question-id="${question.id}"
               data-value="${option.value}">
-        ${option.label}
+        ${translatedLabel}
       </button>
     `;
     }).join('');
@@ -186,15 +192,21 @@ function renderSingleSelectOptions(container, question) {
 }
 
 function renderMultiSelectOptions(container, question) {
+    const lang = state.language || 'en';
+    const qTrans = QUIZ_TRANSLATIONS[question.id];
+
     container.innerHTML = question.options.map((option, index) => {
         const currentAnswers = state.answers[question.id] || [];
         const isSelected = currentAnswers.includes(option.value);
+        // Try to get translation, fallback to option.label
+        const translatedLabel = qTrans?.options?.[option.value]?.[lang] || option.label;
+
         return `
       <button class="quiz-option ${isSelected ? 'selected' : ''}" 
               data-type="multi"
               data-question-id="${question.id}"
               data-value="${option.value}">
-        ${option.label}
+        ${translatedLabel}
       </button>
     `;
     }).join('');

@@ -129,7 +129,13 @@
       </header>
 
       <section class="section">
-        <h1 class="section-title" style="font-size: var(--font-2xl);" id="results-title">Your Perfect Match</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h1 class="section-title" style="font-size: var(--font-2xl); margin-bottom: 0;" id="results-title">Your
+            Perfect Match</h1>
+          <button class="btn btn-secondary" id="btn-results-share" style="padding: 8px 16px; font-size: 14px;">
+            <span class="share-icon">🔗</span> <span id="share-btn-text">Share</span>
+          </button>
+        </div>
         <div class="profile-chips" id="profile-chips">
           <!-- Rendered by JS -->
         </div>
@@ -141,11 +147,7 @@
         </div>
 
         <!-- NEW: SNS Share Button Area -->
-        <div style="text-align: center; margin-top: 20px;">
-          <button class="btn btn-secondary" id="btn-results-share" style="width: 100%; max-width: 300px;">
-            <span class="share-icon">🔗</span> <span id="share-btn-text">Share Results</span>
-          </button>
-        </div>
+
       </section>
 
       <!-- Locked Premium Section -->

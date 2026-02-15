@@ -746,19 +746,48 @@ const UI_STRINGS = {
 const QUIZ_TRANSLATIONS = {
   spiciness: {
     title: { en: "How spicy?", ko: "매운 정도는?", zh: "有多辣？", ja: "辛さは？" },
-    options: {}
+    options: {
+      1: { en: "Mild", ko: "안 매운 (진라면 순한맛)", zh: "不辣", ja: "辛くない" },
+      2: { en: "Slightly Spicy", ko: "살짝 매콤 (신라면 수준)", zh: "微辣", ja: "少し辛い" },
+      3: { en: "Spicy", ko: "매콤 (불닭볶음면 수준)", zh: "辣", ja: "辛い" },
+      4: { en: "Very Spicy", ko: "매운 (핵불닭 수준)", zh: "很辣", ja: "とても辛い" },
+      5: { en: "Extreme", ko: "아주 매운 (신의 영역)", zh: "变态辣", ja: "激辛" }
+    }
   },
   crispiness: {
     title: { en: "How crispy?", ko: "바삭함 정도는?", zh: "有多脆？", ja: "サクサク感は？" },
-    options: {}
+    options: {
+      1: { en: "Soft", ko: "부드러운", zh: "软嫩", ja: "柔らかい" },
+      2: { en: "Slightly Crispy", ko: "약간 바삭", zh: "微脆", ja: "少しサクサク" },
+      3: { en: "Crispy", ko: "바삭", zh: "酥脆", ja: "サクサク" },
+      4: { en: "Very Crispy", ko: "아주 바삭", zh: "很脆", ja: "とてもサクサク" },
+      5: { en: "Crunchy", ko: "크런치 (극강바삭)", zh: "咔滋脆", ja: "ザクザク" }
+    }
   },
   composition: {
     title: { en: "Preferred Cut?", ko: "선호하는 부위는?", zh: "喜欢的部位？", ja: "好みの部位は？" },
-    options: {}
+    options: {
+      'any': { en: "Any", ko: "상관없음", zh: "无所谓", ja: "なんでも" },
+      '순살': { en: "Boneless", ko: "순살", zh: "无骨", ja: "骨なし" },
+      '콤보': { en: "Combo (Legs+Wings)", ko: "콤보 (다리+날개)", zh: "组合 (腿+翅)", ja: "コンボ (足+手羽)" },
+      '윙봉': { en: "Wings", ko: "윙봉", zh: "翅膀", ja: "手羽" },
+      '다리': { en: "Legs", ko: "다리만", zh: "鸡腿", ja: "足のみ" },
+      '전체': { en: "Whole Chicken", ko: "한마리 (뼈)", zh: "整鸡", ja: "丸ごと" }
+    }
   },
   flavor: {
     title: { en: "Preferred Flavor?", ko: "원하는 맛 특징은?", zh: "喜欢的口味？", ja: "好みの味は？" },
-    options: {}
+    options: {
+      '단짠': { en: "Sweet & Salty", ko: "단짠", zh: "甜咸", ja: "甘じょっぱい" },
+      '고소': { en: "Nutty/Savory", ko: "고소", zh: "香浓", ja: "香ばしい" },
+      '매콤': { en: "Spicy", ko: "매콤", zh: "香辣", ja: "ピリ辛" },
+      '치즈': { en: "Cheese", ko: "치즈", zh: "芝士", ja: "チーズ" },
+      '마늘': { en: "Garlic", ko: "마늘", zh: "大蒜", ja: "ニンニク" },
+      '간장': { en: "Soy Sauce", ko: "간장", zh: "酱油", ja: "醤油" },
+      '깔끔': { en: "Clean", ko: "깔끔", zh: "清爽", ja: "さっぱり" },
+      '크리미': { en: "Creamy", ko: "크리미", zh: "奶油", ja: "クリーミー" },
+      '불맛': { en: "Smoky", ko: "불맛", zh: "烟熏", ja: "炭火焼き" }
+    }
   }
 };
 
