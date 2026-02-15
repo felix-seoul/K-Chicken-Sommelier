@@ -1,4 +1,5 @@
 // K-Chicken Sommelier - App Logic (Updated)
+console.log("Start of app.js execution");
 
 // ========== STATE MANAGEMENT ==========
 const state = {
@@ -654,4 +655,26 @@ function applyTranslations(lang) {
     if (state.currentPage === 'results') {
         renderResults();
     }
+}
+
+// ========== LANGUAGES ==========
+function initLanguages() {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const lang = btn.dataset.lang;
+            setLanguage(lang);
+        });
+    });
+}
+
+function setLanguage(lang) {
+    state.language = lang;
+
+    // Update active button
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    applyTranslations(lang);
+    saveState();
 }
